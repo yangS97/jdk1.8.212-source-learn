@@ -10,7 +10,6 @@ import java.util.Map;
  */
 public class MapTest {
     public static void main(String[] args) {
-        //开始测试
         Map<String, Double> hashMap = new HashMap<>();
         hashMap.put("k1", 0.1);
         hashMap.put("k2", 0.2);
