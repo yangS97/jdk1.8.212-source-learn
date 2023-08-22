@@ -68,6 +68,18 @@ package java.util.concurrent;
  * @since 1.5
  * @author Doug Lea
  */
+
+/**
+ * toNacos:  转换成纳秒
+ * toMicros: 转换成微秒
+ * toMillis: 转换成毫秒
+ * toSeconds: 转换成秒
+ * toMinutes: 转换成分钟
+ * toHours: 转换成小时
+ * toDays: 转换成天
+ * convert: 转换成指定单位
+ * excessNanos: 获取纳秒的余数
+ */
 public enum TimeUnit {
     /**
      * Time unit representing one thousandth of a microsecond

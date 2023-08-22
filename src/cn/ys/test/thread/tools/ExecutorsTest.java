@@ -1,4 +1,4 @@
-package cn.ys.test.thread;
+package cn.ys.test.thread.tools;
 
 /**
  * @author YS
@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 工具类 Executors
+ * 线程池工具类 Executors
  */
 public class ExecutorsTest {
     public static void main(String[] args) {
