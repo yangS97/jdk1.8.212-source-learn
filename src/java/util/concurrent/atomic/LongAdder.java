@@ -116,14 +116,21 @@ public class LongAdder extends Striped64 implements Serializable {
      * @return the sum
      */
     public long sum() {
+        // 获取cells数组
         Cell[] as = cells; Cell a;
+        // 初始化累加和
         long sum = base;
-        if (as != null) {
+        // 如果cells数组不为空
+        if (as!= null) {
+            // 遍历cells数组
             for (int i = 0; i < as.length; ++i) {
-                if ((a = as[i]) != null)
+                // 如果当前cell不为空
+                if ((a = as[i])!= null)
+                    // 累加当前cell的值
                     sum += a.value;
             }
         }
+        // 返回累加和
         return sum;
     }
 

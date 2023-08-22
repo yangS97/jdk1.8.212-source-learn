@@ -61,6 +61,13 @@ package java.lang.ref;
  * @since    1.2
  */
 
+/**
+ * 强引用:  new Object()  强引用指向的对象不会被回收, 除非强引用指向null,  否则直到最后报出异常: OutOfMemoryError
+ * 软引用:  new SoftReference(new Object()) ,  内存不足时, 会回收软引用指向的对象(回收后变成null),  如果内存足够, 不会回收软引用指向的对象
+ * 弱引用:  new WeakReference(new Object()) ,  不管内存是否足够,  都会回收弱引用指向的对象(回收后变成null)
+ * 虚引用:  new PhantomReference(new Object()) , 跟没有引用差不多, 随时都可能被回收(回收后变成null)
+ * @param <T>
+ */
 public class SoftReference<T> extends Reference<T> {
 
     /**

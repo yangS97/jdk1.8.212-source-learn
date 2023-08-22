@@ -114,28 +114,28 @@ public class FutureTask<V> implements RunnableFuture<V> {
      */
     @SuppressWarnings("unchecked")
     private V report(int s) throws ExecutionException {
+        // 如果s等于NORMAL，则返回outcome
         Object x = outcome;
         if (s == NORMAL)
             return (V)x;
+        // 如果s大于等于CANCELLED，则抛出CancellationException
         if (s >= CANCELLED)
             throw new CancellationException();
+        // 否则抛出ExecutionException
         throw new ExecutionException((Throwable)x);
     }
-
     /**
-     * Creates a {@code FutureTask} that will, upon running, execute the
-     * given {@code Callable}.
-     *
-     * @param  callable the callable task
-     * @throws NullPointerException if the callable is null
+     * 刚创建的时候, state是NEW 0
      */
     public FutureTask(Callable<V> callable) {
+        // 如果callable为空，抛出空指针异常
         if (callable == null)
             throw new NullPointerException();
+        // 将callable赋值给this.callable
         this.callable = callable;
+        // 将this.state设置为NEW
         this.state = NEW;       // ensure visibility of callable
     }
-
     /**
      * Creates a {@code FutureTask} that will, upon running, execute the
      * given {@code Runnable}, and arrange that {@code get} will return the
@@ -157,6 +157,10 @@ public class FutureTask<V> implements RunnableFuture<V> {
         return state >= CANCELLED;
     }
 
+    /**
+     * 原来的state是NEW，调用cancel(true)后，state变成INTERRUPTING，然后调用finishCompletion()方法，将state变成INTERRUPTED
+     * @return
+     */
     public boolean isDone() {
         return state != NEW;
     }
@@ -186,9 +190,12 @@ public class FutureTask<V> implements RunnableFuture<V> {
      * @throws CancellationException {@inheritDoc}
      */
     public V get() throws InterruptedException, ExecutionException {
+        // 获取当前状态
         int s = state;
+        // 如果当前状态小于等于COMPLETING，则调用awaitDone方法，传入参数false和0L
         if (s <= COMPLETING)
             s = awaitDone(false, 0L);
+        // 返回报告结果
         return report(s);
     }
 
@@ -197,12 +204,16 @@ public class FutureTask<V> implements RunnableFuture<V> {
      */
     public V get(long timeout, TimeUnit unit)
         throws InterruptedException, ExecutionException, TimeoutException {
+        // 如果timeout为空，抛出空指针异常
         if (unit == null)
             throw new NullPointerException();
+        // 获取状态
         int s = state;
+        // 如果状态小于完成中状态，且状态小于完成状态，获取结果，超时异常
         if (s <= COMPLETING &&
             (s = awaitDone(true, unit.toNanos(timeout))) <= COMPLETING)
             throw new TimeoutException();
+        // 返回结果
         return report(s);
     }
 
@@ -253,13 +264,15 @@ public class FutureTask<V> implements RunnableFuture<V> {
     }
 
     public void run() {
-        if (state != NEW ||
+        // 如果状态不是NEW，且不是线程当前的状态，则返回
+        if (state!= NEW ||
             !UNSAFE.compareAndSwapObject(this, runnerOffset,
                                          null, Thread.currentThread()))
             return;
         try {
+            // 如果callable不为空，且状态为NEW，则执行callable的call方法
             Callable<V> c = callable;
-            if (c != null && state == NEW) {
+            if (c!= null && state == NEW) {
                 V result;
                 boolean ran;
                 try {
@@ -284,7 +297,6 @@ public class FutureTask<V> implements RunnableFuture<V> {
                 handlePossibleCancellationInterrupt(s);
         }
     }
-
     /**
      * Executes the computation without setting its result, and then
      * resets this future to initial state, failing to do so if the
